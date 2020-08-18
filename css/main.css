@@ -1,0 +1,23 @@
+html,
+body {
+    background: url(https://img.gta5-mods.com/q95/images/volkswagen-t6-dhv-els-reflective/524801-bd08238a7cbce5b9710cff4aa9f8ab2a.jpg) no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+.center {
+    margin: 0;
+    position: absolute !important;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+.content {
+    background-color: white;
+    padding: 1rem;
+    border-radius: 1rem;
+}
