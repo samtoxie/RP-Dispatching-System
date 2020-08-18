@@ -8,35 +8,44 @@ if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
     exit;
 }
 
-
-
-// Processing form data when form is submitted
+// if changed, update current unit status in database using a stored procedure
+// else get current status from database
+require_once "utils/php/config.php";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    require_once "utils/php/config.php";
-
     $unitstatus = trim($_POST["status"]);
 
-    // Prepare a select statement
     $sql = "CALL `updateStatus`(?, ?);";
 
     if ($stmt = mysqli_prepare($link, $sql)) {
-        // Bind variables to the prepared statement as parameters
         mysqli_stmt_bind_param($stmt, "ii", $_SESSION["id"], $unitstatus);
 
-        // Attempt to execute the prepared statement
         if (mysqli_stmt_execute($stmt)) {
-            // Store result
             mysqli_stmt_store_result($stmt);
         } else {
             echo "Oops! Something went wrong. Please try again later.";
         }
 
-        // Close statement
         mysqli_stmt_close($stmt);
     }
-}
-?>
+} else {
+    $sql = "SELECT unitstatus FROM `status` WHERE id = " . $_SESSION["id"] . ";";
+    $result = mysqli_query($link, $sql);
+    if (mysqli_num_rows($result) > 0) {
+    while ($row = mysqli_fetch_assoc($result)) {
+            $unitstatus = $row["unitstatus"];
+        }
+    } else {
+        $unitstatus = 0;
+    }
 
+    mysqli_close($link);
+}
+
+
+?>
+<script>
+    console.log("Result: <?php echo $unitstatus ?>")
+</script>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -55,12 +64,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <body class="text-center">
     <div class="container center content">
+        <div class="row">
+            <div class="mx-auto col-sm-12">
+                <p>Huidige status: <?php echo $unitstatus?></p>
+            </div>
+        </div>
         <form class="row" action="unitview.php" method="post">
-            <div class="mx-auto align-middle col-xs-6 col-md-4 col-lg-3 col-xl-2"><button name="status" type="submit" class="btn btn-primary w-100" value="1">1</button></div>
-            <div class="mx-auto align-middle col-xs-6 col-md-4 col-lg-3 col-xl-2"><button name="status" type="submit" class="btn btn-primary w-100" value="2">2</button></div>
-            <div class="mx-auto align-middle col-xs-6 col-md-4 col-lg-3 col-xl-2"><button name="status" type="submit" class="btn btn-primary w-100" value="3">3</button></div>
-            <div class="mx-auto align-middle col-xs-6 col-md-4 col-lg-3 col-xl-2"><button name="status" type="submit" class="btn btn-primary w-100" value="4">4</button></div>
-            <div class="mx-auto align-middle col-xs-6 col-md-4 col-lg-3 col-xl-2"><button name="status" type="submit" class="btn btn-primary w-100" value="5">5</button></div>
+            <div class="mx-auto align-middle col-xs-6 col-md-4 col-lg-3 col-xl-2" style="padding:1rem;"><button name="status" type="submit" class="btn btn-primary w-100" value="1">1</button></div>
+            <div class="mx-auto align-middle col-xs-6 col-md-4 col-lg-3 col-xl-2" style="padding:1rem;"><button name="status" type="submit" class="btn btn-primary w-100" value="2">2</button></div>
+            <div class="mx-auto align-middle col-xs-6 col-md-4 col-lg-3 col-xl-2" style="padding:1rem;"><button name="status" type="submit" class="btn btn-primary w-100" value="3">3</button></div>
+            <div class="mx-auto align-middle col-xs-6 col-md-4 col-lg-3 col-xl-2" style="padding:1rem;"><button name="status" type="submit" class="btn btn-primary w-100" value="4">4</button></div>
+            <div class="mx-auto align-middle col-xs-6 col-md-4 col-lg-3 col-xl-2" style="padding:1rem;"><button name="status" type="submit" class="btn btn-primary w-100" value="5">5</button></div>
         </form>
     </div>
 </body>
