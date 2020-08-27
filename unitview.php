@@ -43,9 +43,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
 ?>
-<script>
-    console.log("Result: <?php echo $unitstatus ?>")
-</script>
+<!-- Statuscodes nederlandse politie
+1 	Vrij
+2 	Aanrijdend naar de melding
+3 	Ter plaatse bij de melding
+4 	Aanvraag stemcontact HKD (personalia controle)
+5 	Melding afgehandeld
+6 	Aanvraag stemcontact Meldkamer
+7 	Aanvraag urgent stemcontact
+8 	Sluiten (aan bureau of eigen initiatief melding)
+9 	Niet in gebruik
+0/N 	Noodknop , mobilofoon blijft ca. 30 sec. uitzenden
+-->
 <!DOCTYPE html>
 <html lang="en">
 
